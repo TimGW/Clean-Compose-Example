@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/fragment_repo_list">
+
+    <fragment
+        android:id="@+id/fragment_repo_list"
+        android:name="com.github.abnamro.presentation.repo.list.RepoListFragment"
+        android:label="@string/fragment_repo_list_label"
+        tools:layout="@layout/fragment_repo_list">
+
+    </fragment>
+
+</navigation>

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ABN AMRO assessment</string>
+    <string name="fragment_repo_list_label">Repositories</string>
 </resources>
