@@ -10,19 +10,19 @@ import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
 class GetReposUseCaseTest {
-    private lateinit var useCase: GetReposUseCase
+    private lateinit var useCase: GetReposUseCaseImpl
 
     @Mock
     private lateinit var repository: RepoRepository
 
     @Before
     fun beforeTest() {
-        useCase = GetReposUseCase(repository)
+        useCase = GetReposUseCaseImpl(repository)
     }
 
     @Test
     fun invalidParams() {
-        useCase.execute(GetReposUseCase.Params("Tim"))
+        useCase.execute(GetReposUseCaseImpl.Params("Tim"))
 
         verify(repository).getPagedRepos("Tim")
     }
