@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="TextAppearance.Theme.DisplayLarge" parent="TextAppearance.Material3.DisplayLarge">
+        <!-- custom type style here-->
+    </style>
+
+    <style name="TextAppearance.Theme.DisplayMedium" parent="TextAppearance.Material3.DisplayMedium">
+        <!-- custom type style here-->
+    </style>
+
+    <style name="TextAppearance.Theme.DisplaySmall" parent="TextAppearance.Material3.DisplaySmall">
+        <!-- custom type style here-->>
+    </style>
+
+    <style name="TextAppearance.Theme.HeadlineLarge" parent="TextAppearance.Material3.HeadlineLarge">
+        <!-- custom type style here-->
+    </style>
+
+    <style name="TextAppearance.Theme.HeadlineMedium" parent="TextAppearance.Material3.HeadlineMedium">
+        <!-- custom type style here-->
+    </style>
+
+    <style name="TextAppearance.Theme.HeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">
+        <!-- custom type style here-->
+    </style>
+
+    <style name="TextAppearance.Theme.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <!-- custom type style here-->
+    </style>
+
+    <style name="TextAppearance.Theme.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <!-- custom type style here-->
+    </style>
+
+    <style name="TextAppearance.Theme.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
+        <!-- custom type style here-->
+    </style>
+
+    <style name="TextAppearance.Theme.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <!-- custom type style here-->
+    </style>
+
+    <style name="TextAppearance.Theme.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
+        <!-- custom type style here-->
+    </style>
+
+    <style name="TextAppearance.Theme.BodySmall" parent="TextAppearance.Material3.BodySmall">
+        <!-- custom type style here-->
+    </style>
+
+    <style name="TextAppearance.Theme.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
+        <!-- custom type style here-->
+    </style>
+
+    <style name="TextAppearance.Theme.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
+        <!-- custom type style here-->
+    </style>
+
+    <style name="TextAppearance.Theme.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
+        <!-- custom type style here-->
+    </style>
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--https://m3.material.io/styles/color/the-color-system/color-roles-->
+    <color name="color_alpha_20">#33000000</color>
+
+    <color name="color_blue_primary">#343dff</color>
+    <color name="color_blue_onPrimary">#FFFFFF</color>
+    <color name="color_blue_primaryContainer">#e0e0ff</color>
+    <color name="color_blue_onPrimaryContainer">#00006e</color>
+    <color name="color_blue_secondary">#5c5d72</color>
+    <color name="color_blue_onSecondary">#ffffff</color>
+    <color name="color_blue_secondaryContainer">#e1e0f9</color>
+    <color name="color_blue_onSecondaryContainer">#191a2c</color>
+    <color name="color_blue_tertiary">#78536b</color>
+    <color name="color_blue_onTertiary">#ffffff</color>
+    <color name="color_blue_tertiaryContainer">#ffd8ee</color>
+    <color name="color_blue_onTertiaryContainer">#2e1126</color>
+    <color name="color_blue_error">#ba1a1a</color>
+    <color name="color_blue_onError">#ffffff</color>
+    <color name="color_blue_errorContainer">#ffdad6</color>
+    <color name="color_blue_onErrorContainer">#410002</color>
+    <color name="color_blue_background">#fffbff</color>
+    <color name="color_blue_onBackground">#1b1b1f</color>
+    <color name="color_blue_surface">#fffbff</color>
+    <color name="color_blue_onSurface">#1b1b1f</color>
+    <color name="color_blue_outline">#777680</color>
+    <color name="color_blue_surfaceVariant">#e4e1ec</color>
+    <color name="color_blue_onSurfaceVariant">#46464f</color>
+</resources>
+
