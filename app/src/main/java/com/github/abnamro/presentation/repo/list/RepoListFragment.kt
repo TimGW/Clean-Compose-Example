@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
@@ -14,12 +15,14 @@ import com.github.abnamro.R
 import com.github.abnamro.databinding.FragmentRepoListBinding
 import com.github.abnamro.domain.model.repo.Repo
 import com.github.abnamro.presentation.base.snackbar
+import com.github.abnamro.presentation.repo.RepoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RepoListFragment : Fragment() {
+    private val sharedViewModel by activityViewModels<RepoViewModel>()
     private val viewModel by viewModels<RepoListViewModel>()
     private val repoListAdapter by lazy { RepoListAdapter() }
     private var _binding: FragmentRepoListBinding? = null
@@ -63,6 +66,12 @@ class RepoListFragment : Fragment() {
     }
 
     private fun observeUI() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            sharedViewModel.isNetworkAvailable.collectLatest { isAvailable ->
+                isAvailable?.let { if (it) repoListAdapter.retry() }
+            }
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             // The submitData() method suspends and does not return until either the PagingSource
             // is invalidated or the adapter's refresh method is called.
