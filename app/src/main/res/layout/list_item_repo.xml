@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipToPadding="false">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/repo_item_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="1dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.SelectedCornerRadius"
+        app:strokeColor="?colorOnSurface"
+        app:strokeWidth="1dp"
+        tools:srcCompat="@drawable/ic_placeholder" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/repo_item_name"
+        style="@style/TextAppearance.Theme.TitleLarge"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/repo_item_visibility"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@id/repo_item_image"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Repo name" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/repo_item_visibility"
+        style="@style/TextAppearance.Theme.BodyMedium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/repo_item_private"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@id/repo_item_image"
+        app:layout_constraintTop_toBottomOf="@id/repo_item_name"
+        tools:text="repo visibility" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/repo_item_private"
+        style="@style/TextAppearance.Theme.BodyMedium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@id/repo_item_image"
+        app:layout_constraintTop_toBottomOf="@id/repo_item_visibility"
+        tools:text="repo privacy" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
