@@ -4,6 +4,15 @@
     <string name="error_database">Couldn\'t load values from database</string>
     <string name="error_generic">Something went wrong.</string>
     <string name="error_server">A server error occurred, please try again later</string>
+    <string name="fragment_repo_details_description">Description:\n%1$s</string>
+    <string name="fragment_repo_details_full_name">Full name:\n%1$s</string>
+    <string name="fragment_repo_details_html_link">Open Link</string>
+    <string name="fragment_repo_details_html_link_fail">Unable to open link</string>
+    <string name="fragment_repo_details_last_update">Last update: %1$s</string>
+    <string name="fragment_repo_details_name">Name:\n%1$s</string>
+    <string name="fragment_repo_details_private">Is private: %1$s</string>
+    <string name="fragment_repo_details_error">No results\n\nPull to retry</string>
+    <string name="fragment_repo_details_visibility">Visibility: %1$s</string>
     <string name="fragment_repo_list_error">No results\nPull to retry</string>
     <string name="fragment_repo_list_item_private">Is private: %1$s</string>
     <string name="fragment_repo_list_item_retry">Retry</string>

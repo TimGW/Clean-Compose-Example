@@ -11,6 +11,32 @@
         android:label="@string/fragment_repo_list_label"
         tools:layout="@layout/fragment_repo_list">
 
+        <action
+            android:id="@+id/show_details"
+            app:destination="@id/fragment_repo_details"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:launchSingleTop="true"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@id/fragment_repo_list" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_repo_details"
+        android:name="com.github.abnamro.presentation.repo.details.RepoDetailsFragment"
+        android:label="{pageTitle}"
+        tools:layout="@layout/fragment_repo_details">
+
+        <argument
+            android:name="pageTitle"
+            app:argType="string" />
+
+        <argument
+            android:name="query"
+            app:argType="string" />
+
     </fragment>
 
 </navigation>
