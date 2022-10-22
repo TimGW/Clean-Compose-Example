@@ -27,6 +27,7 @@ import java.util.*
 
 @AndroidEntryPoint
 class RepoDetailsFragment : Fragment() {
+    private val sharedViewModel by activityViewModels<RepoViewModel>()
     private val viewModel by viewModels<RepoDetailsViewModel>()
     private var _binding: FragmentRepoDetailsBinding? = null
     private val binding get() = _binding!!
@@ -54,6 +55,12 @@ class RepoDetailsFragment : Fragment() {
     }
 
     private fun observeUI() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            sharedViewModel.isNetworkAvailable.collectLatest { isAvailable ->
+                isAvailable?.let { if (it) viewModel.fetchRepoDetails() }
+            }
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
