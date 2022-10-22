@@ -1,8 +1,13 @@
 package com.github.abnamro.data.di
 
+import android.content.Context
+import androidx.room.Room
 import com.github.abnamro.BuildConfig
 import com.github.abnamro.data.error.ErrorHandlerImpl
+import com.github.abnamro.data.local.AppDatabase
+import com.github.abnamro.data.local.DATABASE_NAME
 import com.github.abnamro.data.remote.HeaderInterceptor
+import com.github.abnamro.data.remote.jsonAdapter.RepoDetailsJsonAdapter
 import com.github.abnamro.data.remote.jsonAdapter.RepoJsonAdapter
 import com.github.abnamro.domain.model.state.ErrorHandler
 import com.squareup.moshi.Moshi
@@ -10,6 +15,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -30,6 +36,13 @@ abstract class AppModule {
     abstract fun provideHeaderInterceptor(headerInterceptor: HeaderInterceptor): Interceptor
 
     companion object {
+
+        @Provides
+        @Singleton
+        fun providesRoomDb(
+            @ApplicationContext context: Context,
+        ): AppDatabase = Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
+            .build()
 
         @Provides
         @Singleton
@@ -61,6 +74,7 @@ abstract class AppModule {
         @Provides
         fun provideMoshi(): Moshi = Moshi.Builder()
             .add(RepoJsonAdapter())
+            .add(RepoDetailsJsonAdapter())
             .build()
     }
 }
