@@ -1,5 +1,7 @@
 package com.github.abnamro.presentation.repo
 
+import com.github.abnamro.domain.usecase.repo.GetRepoDetailsUseCase
+import com.github.abnamro.domain.usecase.repo.GetRepoDetailsUseCaseImpl
 import com.github.abnamro.domain.usecase.repo.GetReposUseCase
 import com.github.abnamro.domain.usecase.repo.GetReposUseCaseImpl
 import dagger.Binds
@@ -29,4 +31,18 @@ abstract class RepoUseCaseModule {
     abstract fun provideGetReposPagedUseCase(
         getReposUseCaseImpl: GetReposUseCaseImpl
     ): GetReposUseCase
+
+    /**
+     * Binds single instance of the return type and is provided across all dependencies injected
+     * into the ViewModel. Other instances of ViewModel will receive a different instance.
+     *
+     * @param getRepoDetailsUseCaseImpl: the implementation of the UseCase
+     *
+     * @return UseCase to retrieve paged repo's
+     */
+    @Binds
+    @ViewModelScoped
+    abstract fun provideGetRepoDetailsUseCase(
+        getRepoDetailsUseCaseImpl: GetRepoDetailsUseCaseImpl
+    ): GetRepoDetailsUseCase
 }
