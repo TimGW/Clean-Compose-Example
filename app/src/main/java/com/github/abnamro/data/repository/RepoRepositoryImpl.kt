@@ -12,7 +12,6 @@ import com.github.abnamro.domain.model.repo.RepoDetails
 import com.github.abnamro.domain.model.state.ErrorHandler
 import com.github.abnamro.domain.repository.RepoRepository
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import java.util.concurrent.TimeUnit

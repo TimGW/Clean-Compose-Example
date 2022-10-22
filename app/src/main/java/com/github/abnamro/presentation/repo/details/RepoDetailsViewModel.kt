@@ -5,13 +5,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.abnamro.R
-import com.github.abnamro.data.di.IoDispatcher
 import com.github.abnamro.domain.model.repo.RepoDetails
 import com.github.abnamro.domain.model.state.Result
 import com.github.abnamro.domain.usecase.repo.GetRepoDetailsUseCase
 import com.github.abnamro.domain.usecase.repo.GetRepoDetailsUseCaseImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -1,0 +1,4 @@
+# This file contains sensitive api-key information
+
+# Add your GitHub PAT
+GITHUB_PAT="Add your PAT here"

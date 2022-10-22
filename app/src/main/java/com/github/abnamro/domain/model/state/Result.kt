@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.github.abnamro.domain.model.state
 
 /** Wrapper class to handle typical network interactions for data, errors and loading state */

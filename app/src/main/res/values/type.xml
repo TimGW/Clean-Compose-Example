@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="TextAppearance.Theme.DisplayLarge" parent="TextAppearance.Material3.DisplayLarge">
         <!-- custom type style here-->

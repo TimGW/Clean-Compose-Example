@@ -3,7 +3,6 @@ package com.github.abnamro.data.remote.jsonAdapter
 import com.github.abnamro.data.model.RepoDetailsEntity
 import com.github.abnamro.data.model.RepoDetailsJson
 import com.squareup.moshi.FromJson
-import com.squareup.moshi.ToJson
 
 class RepoDetailsJsonAdapter {
 
