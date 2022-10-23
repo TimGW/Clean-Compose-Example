@@ -6,13 +6,19 @@ plugins {
     id 'androidx.navigation.safeargs.kotlin'
 }
 
-def apiKeyPropertiesFile = rootProject.file('apikey.properties')
+File apiKeyPropertiesFile
 def apiKeyProperties = new Properties()
-apiKeyProperties.load(new FileInputStream(apiKeyPropertiesFile))
-
-def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
+File keystorePropertiesFile = rootProject.file("keystore.properties")
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+try {
+    apiKeyPropertiesFile = rootProject.file('apikey.properties')
+    apiKeyProperties.load(new FileInputStream(apiKeyPropertiesFile))
+} catch(FileNotFoundException ex) {
+    project.logger.warn("It seems that you have not yet setup an API key. " +
+            "Please read ./README.md and follow the instructions to authenticate requests.")
+}
 
 android {
     compileSdk 33
@@ -28,6 +34,7 @@ android {
 
         // split up in debug/release buildtypes for other environments in real life
         buildConfigField "String", "BASE_URL", '"https://api.github.com/"'
+        buildConfigField "String", "API_KEY", apiKeyProperties["GITHUB_PAT"] ?: '""'
     }
 
     signingConfigs {
@@ -52,7 +59,6 @@ android {
             signingConfig signingConfigs.debug
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
-            buildConfigField "String", "API_KEY", apiKeyProperties["GITHUB_PAT"]
         }
 
         release {
@@ -61,7 +67,6 @@ android {
             shrinkResources true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "API_KEY", apiKeyProperties["GITHUB_PAT"]
         }
     }
 

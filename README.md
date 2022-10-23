@@ -1,9 +1,9 @@
 # ABN AMRO Android assignment
 
 # Setup
-For unauthenticated requests, the GitHub rate limit allows for up to 60 requests per hour and only
-shows public repo's. In order to increase the limit and show private repo's, you need to setup
-your own Github PAT. Register for one [here](https://github.com/settings/tokens). Pick an appropriate expiration date.
+For unauthenticated requests, the GitHub rate limit allows for up to 60 requests per hour. 
+In order to increase this limit, you need to setup your own Github PAT. 
+Register for one [here](https://github.com/settings/tokens). Pick an appropriate expiration date.
 
 Next copy/rename `apikey.properties.example` to `apikey.properties` and add your key into the
 `GITHUB_PAT` field. When successful, you should now have up to 5000 requests.
@@ -15,7 +15,7 @@ keystore information from the keystore you created earlier.
 
 # Considerations
 * Purposely didn't add (feature) modules because of the size of this assignment.
-* Added a GitHub PAT for all API calls to increase the rate limit.
+* Added (optional) GitHub PAT for all API calls to increase the rate limit.
 * Created separate models for repo list items and the detail page. I think they should be treated
   as separate entities. Even though they display the same data, this could possibly change in the future.
 * Only stored the details page in the database due to time constraints.

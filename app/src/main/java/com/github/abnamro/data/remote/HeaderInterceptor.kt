@@ -14,7 +14,9 @@ class HeaderInterceptor @Inject constructor() : Interceptor {
 
         // Adding `Accept` header is recommended by github
         newRequestBuilder.addHeader("Accept", "application/vnd.github+json")
-        newRequestBuilder.addHeader("Authorization", "Bearer ${BuildConfig.API_KEY}")
+
+        val key = BuildConfig.API_KEY
+        if(key.isNotEmpty()) newRequestBuilder.addHeader("Authorization", "Bearer $key")
 
         return chain.proceed(newRequestBuilder.build())
     }

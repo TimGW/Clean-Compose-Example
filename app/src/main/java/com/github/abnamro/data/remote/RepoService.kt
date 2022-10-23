@@ -10,6 +10,7 @@ import retrofit2.http.Query
 /** Retrofit service for Github Repo API calls */
 interface RepoService {
 
+    /** Only lists public repos, for private repos call `user/repos` and authenticate */
     @GET("users/{username}/repos")
     suspend fun getRepos(
         @Path("username") userName: String,
