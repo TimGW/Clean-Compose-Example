@@ -7,10 +7,9 @@ plugins {
 }
 
 File apiKeyPropertiesFile
+File keystorePropertiesFile
 def apiKeyProperties = new Properties()
 def keystoreProperties = new Properties()
-File keystorePropertiesFile = rootProject.file("keystore.properties")
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 try {
     apiKeyPropertiesFile = rootProject.file('apikey.properties')
@@ -18,6 +17,14 @@ try {
 } catch(FileNotFoundException ex) {
     project.logger.warn("It seems that you have not yet setup an API key. " +
             "Please read ./README.md and follow the instructions to authenticate requests.")
+}
+
+try {
+    keystorePropertiesFile = rootProject.file("keystore.properties")
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+} catch(FileNotFoundException ex) {
+    project.logger.warn("It seems that you have not yet setup a release signingConfig " +
+            "Please read ./README.md and follow the instructions")
 }
 
 android {
@@ -44,12 +51,12 @@ android {
             keyAlias "androiddebugkey"
             keyPassword "android"
         }
-        release {
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['storePassword']
-        }
+//        release { // TODO uncomment after release keystore creation (see README.md)
+//            storeFile file(keystoreProperties['storeFile'])
+//            storePassword keystoreProperties['storePassword']
+//            keyAlias keystoreProperties['keyAlias']
+//            keyPassword keystoreProperties['storePassword']
+//        }
     }
 
     buildTypes {
@@ -65,7 +72,7 @@ android {
             debuggable false
             minifyEnabled true
             shrinkResources true
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug // TODO update to .release after keystore creation (see README.md)
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

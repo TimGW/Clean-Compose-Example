@@ -8,12 +8,14 @@ Register for one [here](https://github.com/settings/tokens). Pick an appropriate
 Next copy/rename `apikey.properties.example` to `apikey.properties` and add your key into the
 `GITHUB_PAT` field. When successful, you should now have up to 5000 requests.
 
-Finally, if you want to run the release variant you can create a new keystore
-via `Build` -> `Generate Signed Bundle/APK...` and store your keystore in a safe location.
-Then copy/rename `keystore.properties.example` to `keystore.properties` and fill in the sensitive
-keystore information from the keystore you created earlier.
+Finally, if you want to build a release variant, create a new keystore via `Build` -> 
+`Generate Signed Bundle/APK...` and store your keystore in a safe location. 
+Copy/rename `keystore.properties.example` to `keystore.properties` and fill in the sensitive
+keystore information from the keystore you created earlier. Update the signingConfigs for the 
+release variant from `signingConfig signingConfigs.debug` to`signingConfig signingConfigs.release`
 
 # Considerations
+* Set the signingConfig for release to debug in the build.gradle to prevent crash on initialisation.
 * Purposely didn't add (feature) modules because of the size of this assignment.
 * Added (optional) GitHub PAT for all API calls to increase the rate limit.
 * Created separate models for repo list items and the detail page. I think they should be treated
