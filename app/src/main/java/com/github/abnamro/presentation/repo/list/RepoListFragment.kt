@@ -1,9 +1,7 @@
 package com.github.abnamro.presentation.repo.list
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -16,38 +14,24 @@ import com.github.abnamro.R
 import com.github.abnamro.databinding.FragmentRepoListBinding
 import com.github.abnamro.domain.model.repo.Repo
 import com.github.abnamro.presentation.base.snackbar
+import com.github.abnamro.presentation.base.viewBinding
 import com.github.abnamro.presentation.repo.RepoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class RepoListFragment : Fragment() {
+class RepoListFragment : Fragment(R.layout.fragment_repo_list) {
     private val sharedViewModel by activityViewModels<RepoViewModel>()
     private val viewModel by viewModels<RepoListViewModel>()
     private val repoListAdapter by lazy { RepoListAdapter() }
-    private var _binding: FragmentRepoListBinding? = null
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentRepoListBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    private val binding by viewBinding(FragmentRepoListBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         observeUI()
         binding.swiperefresh.setOnRefreshListener { repoListAdapter.refresh() }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun setupRecyclerView() {

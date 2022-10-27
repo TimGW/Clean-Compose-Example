@@ -17,6 +17,7 @@ import com.github.abnamro.R
 import com.github.abnamro.databinding.FragmentRepoDetailsBinding
 import com.github.abnamro.domain.model.repo.RepoDetails
 import com.github.abnamro.presentation.base.snackbar
+import com.github.abnamro.presentation.base.viewBinding
 import com.github.abnamro.presentation.repo.RepoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -26,20 +27,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
-class RepoDetailsFragment : Fragment() {
+class RepoDetailsFragment : Fragment(R.layout.fragment_repo_details) {
     private val sharedViewModel by activityViewModels<RepoViewModel>()
     private val viewModel by viewModels<RepoDetailsViewModel>()
-    private var _binding: FragmentRepoDetailsBinding? = null
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentRepoDetailsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    private val binding by viewBinding(FragmentRepoDetailsBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,19 +40,18 @@ class RepoDetailsFragment : Fragment() {
         observeUI()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     private fun observeUI() {
         viewLifecycleOwner.lifecycleScope.launch {
-            sharedViewModel.isNetworkAvailable.collectLatest { isAvailable ->
-                isAvailable?.let { if (it) viewModel.fetchRepoDetails() }
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                sharedViewModel.isNetworkAvailable.collectLatest { isAvailable ->
+                    isAvailable?.let { if (it) viewModel.fetchRepoDetails() }
+                }
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
+//            This approach processes the flow emissions only when the UI is visible on the screen,
+//            saving resources and potentially avoiding app crashes.
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
                     uiState.errorState?.let { showErrorState() }
