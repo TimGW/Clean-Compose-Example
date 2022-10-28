@@ -1,62 +1,55 @@
 package com.github.abnamro.presentation.repo
 
-import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkCapabilities
-import android.net.NetworkRequest
 import android.os.Bundle
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import com.github.abnamro.R
-import com.github.abnamro.databinding.ActivityMainBinding
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.github.abnamro.presentation.repo.navigation.Overview
+import com.github.abnamro.presentation.repo.navigation.RepoNavHost
+import com.github.abnamro.presentation.repo.navigation.screens
+import com.github.abnamro.presentation.theme.ABNAMROAssessmentTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RepoActivity : AppCompatActivity() {
-    private val viewModel by viewModels<RepoViewModel>()
-    private lateinit var binding: ActivityMainBinding
-    private val navController: NavController by lazy {
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
-        (navHostFragment as NavHostFragment).navController
-    }
-    private val networkRequest: NetworkRequest = NetworkRequest.Builder()
-        .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-        .build()
-    private val connectivityManager by lazy {
-        getSystemService(ConnectivityManager::class.java) as ConnectivityManager
-    }
-    private val networkCallback = object: ConnectivityManager.NetworkCallback() {
-        override fun onAvailable(network: Network) {
-            super.onAvailable(network)
-            viewModel.updateNetworkAvailability(true)
-        }
-        override fun onLost(network: Network) {
-            super.onLost(network)
-            viewModel.updateNetworkAvailability(false)
-        }
-    }
+class RepoActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        setupActionBarWithNavController(navController, AppBarConfiguration(navController.graph))
+        setContent {
+            ABNAMROAssessmentTheme {
+                AbnAmroApp()
+            }
+        }
     }
 
-    override fun onResume() {
-        super.onResume()
-        connectivityManager.requestNetwork(networkRequest, networkCallback)
-    }
+    @Composable
+    fun AbnAmroApp() {
+        val navController = rememberNavController()
+        val currentBackStack by navController.currentBackStackEntryAsState()
+        val currentDestination = currentBackStack?.destination
+        val currentScreen = screens.find { it.route == currentDestination?.route } ?: Overview
 
-    override fun onPause() {
-        super.onPause()
-        connectivityManager.unregisterNetworkCallback(networkCallback)
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = currentScreen.route) },
+                    backgroundColor = MaterialTheme.colors.surface,
+                )
+            }
+        ) { innerPadding ->
+            RepoNavHost(
+                navController = navController,
+                modifier = Modifier.padding(innerPadding)
+            )
+        }
     }
-
-    override fun onSupportNavigateUp() =
-        navController.navigateUp() || super.onSupportNavigateUp()
 }
