@@ -3,6 +3,7 @@
 package com.github.abnamro.data.di
 
 import android.content.Context
+import android.net.ConnectivityManager
 import androidx.room.Room
 import com.github.abnamro.BuildConfig
 import com.github.abnamro.data.error.ErrorHandlerImpl
@@ -38,6 +39,10 @@ abstract class AppModule {
     abstract fun provideHeaderInterceptor(headerInterceptor: HeaderInterceptor): Interceptor
 
     companion object {
+
+        @Provides
+        fun provideConnectivityManager(@ApplicationContext context: Context): ConnectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         @Provides
         @Singleton

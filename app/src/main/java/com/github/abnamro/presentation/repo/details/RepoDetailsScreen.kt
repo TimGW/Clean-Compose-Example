@@ -1,6 +1,5 @@
 package com.github.abnamro.presentation.repo.details
 
-import android.net.Uri
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -27,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.OpenInBrowser
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -46,6 +46,7 @@ import coil.request.ImageRequest
 import com.github.abnamro.R
 import com.github.abnamro.domain.model.repo.RepoDetails
 import com.github.abnamro.presentation.base.AnimatingFabContent
+import com.github.abnamro.presentation.base.ConnectivityStatus
 import com.github.abnamro.presentation.base.baselineHeight
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -62,11 +63,18 @@ fun RepoDetailsScreen(
     val loadingState = rememberSwipeRefreshState(isRefreshing = uiState.loadingState ?: false)
     val scrollState = rememberScrollState()
 
+    val hasNetwork by viewModel.networkStatus.collectAsState(true)
+    LaunchedEffect(hasNetwork) {
+        if (hasNetwork) viewModel.fetchRepoDetails(forceRefresh = true)
+    }
+
     SwipeRefresh(
         state = loadingState,
+        swipeEnabled = hasNetwork,
         onRefresh = { viewModel.fetchRepoDetails(forceRefresh = true) },
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
+            ConnectivityStatus(hasNetwork)
             BoxWithConstraints(modifier = Modifier.weight(1f)) {
                 Surface {
                     Column(

@@ -5,10 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.abnamro.R
 import com.github.abnamro.domain.model.repo.RepoDetails
+import com.github.abnamro.domain.model.state.ConnectionState
 import com.github.abnamro.domain.model.state.Result
+import com.github.abnamro.domain.usecase.repo.GetNetworkStatusUseCase
 import com.github.abnamro.domain.usecase.repo.GetRepoDetailsUseCase
 import com.github.abnamro.domain.usecase.repo.GetRepoDetailsUseCaseImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,11 +24,13 @@ import javax.inject.Inject
 @HiltViewModel
 class RepoDetailsViewModel @Inject constructor(
     private val getRepoDetailsUseCase: GetRepoDetailsUseCase,
+    getNetworkStatusUseCase: GetNetworkStatusUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val query: String = checkNotNull(savedStateHandle["query"]) // todo: safe args?
     private val _uiState = MutableStateFlow(RepoDetailsUiState())
     val uiState: StateFlow<RepoDetailsUiState> = _uiState.asStateFlow()
+    val networkStatus: Flow<Boolean> = getNetworkStatusUseCase.execute(Unit)
 
     init {
         fetchRepoDetails()

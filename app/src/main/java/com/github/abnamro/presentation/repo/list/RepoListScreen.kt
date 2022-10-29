@@ -2,6 +2,7 @@ package com.github.abnamro.presentation.repo.list
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +11,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -20,6 +24,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.github.abnamro.domain.model.repo.Repo
+import com.github.abnamro.presentation.base.ConnectivityStatus
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.flow.Flow
@@ -30,14 +35,24 @@ fun RepoList(
     onRepoClick: (String) -> Unit,
 ) {
     val items = viewModel.uiState.collectAsLazyPagingItems()
+    val hasNetwork by viewModel.networkStatus.collectAsState(true)
     val state = rememberSwipeRefreshState(
         isRefreshing = items.loadState.refresh is LoadState.Loading,
     )
+
+    LaunchedEffect(hasNetwork) {
+        if (hasNetwork) items.refresh()
+    }
+
     SwipeRefresh(
         state = state,
+        swipeEnabled = hasNetwork,
         onRefresh = { items.refresh() },
     ) {
-        RepoListContent(list = viewModel.uiState, onRepoClick)
+        Column {
+            ConnectivityStatus(hasNetwork)
+            RepoListContent(list = viewModel.uiState, onRepoClick)
+        }
     }
 }
 
@@ -47,8 +62,6 @@ fun RepoListContent(
     onRepoClick: (String) -> Unit
 ) {
     val pagingItems: LazyPagingItems<Repo> = list.collectAsLazyPagingItems()
-//    val ctx = LocalContext.current
-//    val navController = rememberNavController()
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
