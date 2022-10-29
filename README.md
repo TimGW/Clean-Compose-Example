@@ -21,3 +21,5 @@ release variant from `signingConfig signingConfigs.debug` to`signingConfig signi
 # Things to improve
 * Provide a more structured setup for mapping between models domain/network/database.
 * Improve test coverage.
+* Bundle available data and reload details in background 
+* Refactor remote mediator with repository 
