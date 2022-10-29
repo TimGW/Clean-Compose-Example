@@ -1,10 +1,13 @@
-package com.github.cleancompose.presentation.repo.details
+package com.github.cleancompose.presentation.repo.screens.details
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -38,6 +41,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -45,9 +49,9 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.github.cleancompose.R
 import com.github.cleancompose.domain.model.repo.RepoDetails
-import com.github.cleancompose.presentation.base.AnimatingFabContent
-import com.github.cleancompose.presentation.base.ConnectivityStatus
-import com.github.cleancompose.presentation.base.baselineHeight
+import com.github.cleancompose.presentation.core.AnimatingFabContent
+import com.github.cleancompose.presentation.core.ConnectivityStatus
+import com.github.cleancompose.presentation.core.baselineHeight
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import java.sql.Date
@@ -59,49 +63,113 @@ fun RepoDetailsScreen(
     viewModel: RepoDetailsViewModel = hiltViewModel(),
 ) {
     val uiState: RepoDetailsUiState by viewModel.uiState.collectAsState()
-    val repo = uiState.dataState ?: return
-    val loadingState = rememberSwipeRefreshState(isRefreshing = uiState.loadingState ?: false)
+    val loadingState = rememberSwipeRefreshState(uiState is RepoDetailsUiState.Loading)
     val scrollState = rememberScrollState()
-
     val hasNetwork by viewModel.networkStatus.collectAsState(true)
-    LaunchedEffect(hasNetwork) {
-        if (hasNetwork) viewModel.fetchRepoDetails(forceRefresh = true)
-    }
+    val refresh = { viewModel.fetchRepoDetails(forceRefresh = true) }
+
+    LaunchedEffect(hasNetwork) { if (hasNetwork) refresh() }
 
     SwipeRefresh(
         state = loadingState,
         swipeEnabled = hasNetwork,
-        onRefresh = { viewModel.fetchRepoDetails(forceRefresh = true) },
+        onRefresh = refresh
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            ConnectivityStatus(hasNetwork)
-            BoxWithConstraints(modifier = Modifier.weight(1f)) {
-                Surface {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(scrollState),
-                    ) {
-                        DetailsHeader(
-                            scrollState,
-                            repo,
-                            this@BoxWithConstraints.maxHeight
-                        )
-                        RepoContent(repo, this@BoxWithConstraints.maxHeight)
-                    }
-                }
-                UriFab(
-                    cta = repo.htmlURL,
-                    extended = scrollState.value == 0,
-                    modifier = Modifier.align(Alignment.BottomEnd)
-                )
+        when (val state = uiState) {
+            is RepoDetailsUiState.Initial -> { /* Do nothing */ }
+            is RepoDetailsUiState.Loading -> {
+                state.repoDetails?.let { RepoSuccessState(it, scrollState, hasNetwork) }
             }
+            is RepoDetailsUiState.Success -> RepoSuccessState(
+                state.repoDetails, scrollState, hasNetwork
+            )
+            RepoDetailsUiState.Empty -> RepoEmptyState()
+            is RepoDetailsUiState.FatalError -> RepoFatalErrorState(state.message)
+            is RepoDetailsUiState.SoftError -> RepoSoftErrorState(
+                state.repoDetails,
+                state.message,
+                scrollState,
+                hasNetwork
+            )
         }
     }
 }
 
 @Composable
-private fun DetailsHeader(
+private fun RepoSuccessState(
+    repoDetails: RepoDetails,
+    scrollState: ScrollState,
+    hasNetwork: Boolean,
+) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        ConnectivityStatus(hasNetwork)
+        BoxWithConstraints(modifier = Modifier.weight(1f)) {
+            Surface {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(scrollState),
+                ) {
+                    RepoHeader(
+                        scrollState,
+                        repoDetails,
+                        this@BoxWithConstraints.maxHeight
+                    )
+                    RepoContent(repoDetails, this@BoxWithConstraints.maxHeight)
+                }
+            }
+            UriFab(
+                cta = repoDetails.htmlURL,
+                extended = scrollState.value == 0,
+                modifier = Modifier.align(Alignment.BottomEnd)
+            )
+        }
+    }
+}
+
+@Composable
+private fun RepoEmptyState() {
+    RepoFatalErrorState(R.string.fragment_repo_details_empty)
+}
+
+@Composable
+private fun RepoFatalErrorState(message: Int) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+            .fillMaxHeight()
+    ) {
+        Text(
+            text = stringResource(message),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.align(alignment = Alignment.Center),
+            style = MaterialTheme.typography.h4,
+        )
+    }
+}
+
+@Composable
+private fun RepoSoftErrorState(
+    repoDetails: RepoDetails,
+    message: Int,
+    scrollState: ScrollState,
+    hasNetwork: Boolean
+) {
+    RepoSuccessState(
+        repoDetails = repoDetails,
+        scrollState = scrollState,
+        hasNetwork = hasNetwork,
+    )
+    showMessage(LocalContext.current, message = stringResource(message))
+}
+
+private fun showMessage(context: Context, message: String) {
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+}
+
+@Composable
+private fun RepoHeader(
     scrollState: ScrollState,
     repo: RepoDetails,
     containerHeight: Dp
@@ -133,19 +201,19 @@ private fun RepoContent(repo: RepoDetails, containerHeight: Dp) {
     Column {
         Spacer(modifier = Modifier.height(8.dp))
 
-        Name(repo)
+        RepoName(repo)
 
-        ProfileProperty(stringResource(R.string.fragment_repo_details_full_name), repo.fullName)
-        ProfileProperty(
+        RepoProperty(stringResource(R.string.fragment_repo_details_full_name), repo.fullName)
+        RepoProperty(
             stringResource(R.string.fragment_repo_details_description),
             repo.description
         )
-        ProfileProperty(stringResource(R.string.fragment_repo_details_visibility), repo.visibility)
-        ProfileProperty(
+        RepoProperty(stringResource(R.string.fragment_repo_details_visibility), repo.visibility)
+        RepoProperty(
             stringResource(R.string.fragment_repo_details_private),
             repo.isPrivate.toString()
         )
-        ProfileProperty(
+        RepoProperty(
             stringResource(R.string.fragment_repo_details_last_update),
             SimpleDateFormat("HH:mm", Locale.getDefault()) // TODO: do formatting in VM
                 .format(Date(repo.modifiedAt))
@@ -158,29 +226,21 @@ private fun RepoContent(repo: RepoDetails, containerHeight: Dp) {
 }
 
 @Composable
-private fun Name(
+private fun RepoName(
     repo: RepoDetails
 ) {
     Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
-        Name(
-            repo = repo,
-            modifier = Modifier.baselineHeight(32.dp)
+        Text(
+            text = repo.name,
+            modifier = Modifier.baselineHeight(32.dp),
+            style = MaterialTheme.typography.h5,
+            fontWeight = FontWeight.Bold
         )
     }
 }
 
 @Composable
-private fun Name(repo: RepoDetails, modifier: Modifier = Modifier) {
-    Text(
-        text = repo.name,
-        modifier = modifier,
-        style = MaterialTheme.typography.h5,
-        fontWeight = FontWeight.Bold
-    )
-}
-
-@Composable
-fun ProfileProperty(label: String, value: String, isLink: Boolean = false) {
+private fun RepoProperty(label: String, value: String, isLink: Boolean = false) {
     Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
         Divider()
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
@@ -204,7 +264,7 @@ fun ProfileProperty(label: String, value: String, isLink: Boolean = false) {
 }
 
 @Composable
-fun UriFab(cta: String, extended: Boolean, modifier: Modifier = Modifier) {
+private fun UriFab(cta: String, extended: Boolean, modifier: Modifier = Modifier) {
     val uriHandler = LocalUriHandler.current
 
     FloatingActionButton(

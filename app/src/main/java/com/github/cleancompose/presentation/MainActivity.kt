@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.github.cleancompose.presentation.repo.navigation.Destination
+import com.github.cleancompose.presentation.repo.navigation.RepoDestination
 import com.github.cleancompose.presentation.repo.navigation.RepoNavHost
 import com.github.cleancompose.presentation.repo.navigation.screens
 import com.github.cleancompose.presentation.theme.CleanComposeTheme
@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
         val currentBackStack by navController.currentBackStackEntryAsState()
         val currentDestination = currentBackStack?.destination
         val currentScreen = screens.find { currentDestination?.route?.contains(it.route) ?: true }
-            ?: Destination.ListScreen
+            ?: RepoDestination.ListScreen
 
         Scaffold(
             topBar = {

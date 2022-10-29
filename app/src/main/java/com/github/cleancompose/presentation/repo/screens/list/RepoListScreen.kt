@@ -1,4 +1,4 @@
-package com.github.cleancompose.presentation.repo.list
+package com.github.cleancompose.presentation.repo.screens.list
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,7 +24,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.github.cleancompose.domain.model.repo.Repo
-import com.github.cleancompose.presentation.base.ConnectivityStatus
+import com.github.cleancompose.presentation.core.ConnectivityStatus
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.flow.Flow

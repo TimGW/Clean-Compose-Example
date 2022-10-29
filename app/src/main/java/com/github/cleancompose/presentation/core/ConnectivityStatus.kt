@@ -1,4 +1,4 @@
-package com.github.cleancompose.presentation.base
+package com.github.cleancompose.presentation.core
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState

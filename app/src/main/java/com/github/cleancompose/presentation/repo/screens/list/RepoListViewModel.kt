@@ -1,4 +1,4 @@
-package com.github.cleancompose.presentation.repo.list
+package com.github.cleancompose.presentation.repo.screens.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,9 +15,6 @@ class RepoListViewModel @Inject constructor(
     getReposUseCase: GetReposUseCase,
     getNetworkStatusUseCase: GetNetworkStatusUseCase,
 ) : ViewModel() {
-
     val networkStatus: Flow<Boolean> = getNetworkStatusUseCase.execute(Unit)
-
-    // TODO also create separate UiState model
     val uiState = getReposUseCase.execute(GetReposUseCaseImpl.Params()).cachedIn(viewModelScope)
 }

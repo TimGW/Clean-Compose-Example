@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.cleancompose.presentation.base
+package com.github.cleancompose.presentation.core
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing

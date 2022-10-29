@@ -1,4 +1,4 @@
-package com.github.cleancompose.presentation.repo.list
+package com.github.cleancompose.presentation.repo.screens.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

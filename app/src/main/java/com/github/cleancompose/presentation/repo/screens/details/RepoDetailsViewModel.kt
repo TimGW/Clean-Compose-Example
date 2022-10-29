@@ -1,4 +1,4 @@
-package com.github.cleancompose.presentation.repo.details
+package com.github.cleancompose.presentation.repo.screens.details
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -27,7 +27,8 @@ class RepoDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val query: String = checkNotNull(savedStateHandle["query"]) // todo: safe args?
-    private val _uiState = MutableStateFlow(RepoDetailsUiState())
+    private val _uiState: MutableStateFlow<RepoDetailsUiState> =
+        MutableStateFlow(RepoDetailsUiState.Initial)
     val uiState: StateFlow<RepoDetailsUiState> = _uiState.asStateFlow()
     val networkStatus: Flow<Boolean> = getNetworkStatusUseCase.execute(Unit)
 
@@ -36,50 +37,35 @@ class RepoDetailsViewModel @Inject constructor(
     }
 
     fun fetchRepoDetails(forceRefresh: Boolean = false) {
-        val result = getRepoDetailsUseCase.execute(GetRepoDetailsUseCaseImpl.Params(query, forceRefresh))
+        val result =
+            getRepoDetailsUseCase.execute(GetRepoDetailsUseCaseImpl.Params(query, forceRefresh))
         viewModelScope.launch {
             result.onEach { updateUiState(it) }.collect()
         }
     }
 
-    fun getMessageForError(error: Result.ErrorType?) = when (error) {
+    fun getMessageForError(error: Result.ErrorType) = when (error) {
         is Result.ErrorType.DatabaseError -> R.string.error_database
         is Result.ErrorType.HttpError -> R.string.error_server
         is Result.ErrorType.IOError -> R.string.error_connection
         is Result.ErrorType.Unknown -> R.string.error_generic
-        else -> null
     }
 
     private fun updateUiState(
         result: Result<RepoDetails?>
     ) {
-        when(result) {
+        when (result) {
             is Result.Error -> _uiState.update {
-                it.copy(
-                    dataState = result.data,
-                    loadingState = false,
-                    errorState = result.data == null,
-                    message = getMessageForError(result.error)
-                )
+                val msg = getMessageForError(result.error)
+                result.data?.let { RepoDetailsUiState.SoftError(it, msg) }
+                    ?: RepoDetailsUiState.FatalError(msg)
             }
-            is Result.Loading -> _uiState.update {
-                it.copy(
-                    dataState = result.data,
-                    loadingState = true,
-                    errorState = false,
-                    message = null
-                )
-            }
+            is Result.Loading -> _uiState.update { RepoDetailsUiState.Loading(result.data) }
             is Result.Success -> _uiState.update {
-                it.copy(
-                    dataState = result.data,
-                    loadingState = false,
-                    errorState = result.data == null,
-                    message = null
-                )
+                result.data?.let { RepoDetailsUiState.Success(it) } ?: RepoDetailsUiState.Empty
             }
         }
     }
 
-    fun onMessageShown() { _uiState.update { it.copy(message = null) } }
+//    fun onMessageShown() { _uiState.update { it.copy(message = null) } }
 }

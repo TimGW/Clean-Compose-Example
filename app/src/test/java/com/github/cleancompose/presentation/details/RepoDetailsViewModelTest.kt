@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.github.cleancompose.R
 import com.github.cleancompose.domain.model.state.Result.ErrorType
 import com.github.cleancompose.domain.usecase.repo.GetRepoDetailsUseCase
-import com.github.cleancompose.presentation.repo.details.RepoDetailsViewModel
+import com.github.cleancompose.presentation.repo.screens.details.RepoDetailsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
