@@ -22,7 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.github.abnamro.presentation.repo.navigation.Destination
 import com.github.abnamro.presentation.repo.navigation.RepoNavHost
 import com.github.abnamro.presentation.repo.navigation.screens
-import com.github.abnamro.presentation.theme.ABNAMROAssessmentTheme
+import com.github.abnamro.presentation.theme.CleanComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,14 +31,14 @@ class RepoActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ABNAMROAssessmentTheme {
-                AbnAmroApp()
+            CleanComposeTheme {
+                CleanComposeApp()
             }
         }
     }
 
     @Composable
-    fun AbnAmroApp() {
+    fun CleanComposeApp() {
         val navController = rememberNavController()
         val currentBackStack by navController.currentBackStackEntryAsState()
         val currentDestination = currentBackStack?.destination

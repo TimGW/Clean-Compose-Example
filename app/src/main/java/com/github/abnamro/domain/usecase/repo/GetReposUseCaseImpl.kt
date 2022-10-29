@@ -17,4 +17,4 @@ class GetReposUseCaseImpl @Inject constructor(
     ): Flow<PagingData<Repo>> = repository.getPagedRepos(params.user)
 }
 
-private const val DEFAULT_USER = "abnamrocoesd"
+private const val DEFAULT_USER = "timgw"
