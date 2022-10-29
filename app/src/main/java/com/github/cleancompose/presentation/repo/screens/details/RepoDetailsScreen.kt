@@ -51,6 +51,7 @@ import com.github.cleancompose.R
 import com.github.cleancompose.domain.model.repo.RepoDetails
 import com.github.cleancompose.presentation.core.AnimatingFabContent
 import com.github.cleancompose.presentation.core.ConnectivityStatus
+import com.github.cleancompose.presentation.core.ShowTextScreen
 import com.github.cleancompose.presentation.core.baselineHeight
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -83,8 +84,8 @@ fun RepoDetailsScreen(
             is RepoDetailsUiState.Success -> RepoSuccessState(
                 state.repoDetails, scrollState, hasNetwork
             )
-            RepoDetailsUiState.Empty -> RepoEmptyState()
-            is RepoDetailsUiState.FatalError -> RepoFatalErrorState(state.message)
+            RepoDetailsUiState.Empty -> ShowTextScreen(R.string.fragment_repo_details_empty)
+            is RepoDetailsUiState.FatalError -> ShowTextScreen(state.message)
             is RepoDetailsUiState.SoftError -> RepoSoftErrorState(
                 state.repoDetails,
                 state.message,
@@ -124,28 +125,6 @@ private fun RepoSuccessState(
                 modifier = Modifier.align(Alignment.BottomEnd)
             )
         }
-    }
-}
-
-@Composable
-private fun RepoEmptyState() {
-    RepoFatalErrorState(R.string.fragment_repo_details_empty)
-}
-
-@Composable
-private fun RepoFatalErrorState(message: Int) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
-            .fillMaxHeight()
-    ) {
-        Text(
-            text = stringResource(message),
-            textAlign = TextAlign.Center,
-            modifier = Modifier.align(alignment = Alignment.Center),
-            style = MaterialTheme.typography.h4,
-        )
     }
 }
 

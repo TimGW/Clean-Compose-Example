@@ -23,8 +23,10 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import com.github.cleancompose.R
 import com.github.cleancompose.domain.model.repo.Repo
 import com.github.cleancompose.presentation.core.ConnectivityStatus
+import com.github.cleancompose.presentation.core.ShowTextScreen
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.flow.Flow
@@ -74,18 +76,14 @@ fun RepoListContent(
         pagingItems.apply {
             when {
                 loadState.refresh is LoadState.NotLoading -> {
-                    // TODO
                     item {
                         if (pagingItems.itemCount == 0) {
-                            Text(
-                                modifier = Modifier.padding(16.dp),
-                                text = "error",
-                            )
+                            ShowTextScreen(R.string.fragment_repo_list_empty)
                         }
                     }
                 }
-                loadState.refresh is LoadState.Loading -> {
-                    //You can add modifier to manage load state when first time response page is loading
+                loadState.refresh is LoadState.Error -> {
+                    item { ShowTextScreen(R.string.fragment_repo_list_error) }
                 }
                 loadState.append is LoadState.Loading -> {
                     item {
@@ -99,14 +97,7 @@ fun RepoListContent(
                     }
                 }
                 loadState.append is LoadState.Error -> {
-                    //You can use modifier to show error message
-                    item {
-                        // todo
-                        Text(
-                            modifier = Modifier.padding(16.dp),
-                            text = "error",
-                        )
-                    }
+                    item { ShowTextScreen(R.string.fragment_repo_list_error) }
                 }
             }
         }

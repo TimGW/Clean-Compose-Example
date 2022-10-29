@@ -14,7 +14,8 @@
     <string name="fragment_repo_details_private">Is private</string>
     <string name="fragment_repo_details_empty">No results found</string>
     <string name="fragment_repo_details_visibility">Visibility</string>
-    <string name="fragment_repo_list_error">No results\nPull to retry</string>
+    <string name="fragment_repo_list_empty">No results found</string>
+    <string name="fragment_repo_list_error">A fatal error occurred</string>
     <string name="fragment_repo_list_item_private">Is private: %1$s</string>
     <string name="fragment_repo_list_item_retry">Retry</string>
     <string name="fragment_repo_list_item_visibility">Visibility: %1$s</string>
