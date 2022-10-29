@@ -3,6 +3,7 @@ package com.github.abnamro.presentation.repo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -18,11 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.github.abnamro.presentation.repo.navigation.Destination
 import com.github.abnamro.presentation.repo.navigation.RepoNavHost
 import com.github.abnamro.presentation.repo.navigation.screens
 import com.github.abnamro.presentation.theme.CleanComposeTheme
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -37,13 +38,14 @@ class RepoActivity : ComponentActivity() {
         }
     }
 
+    @OptIn(ExperimentalAnimationApi::class)
     @Composable
     fun CleanComposeApp() {
-        val navController = rememberNavController()
+        val navController = rememberAnimatedNavController()
         val currentBackStack by navController.currentBackStackEntryAsState()
         val currentDestination = currentBackStack?.destination
         val currentScreen = screens.find { currentDestination?.route?.contains(it.route) ?: true }
-            ?: Destination.List
+            ?: Destination.ListScreen
 
         Scaffold(
             topBar = {
