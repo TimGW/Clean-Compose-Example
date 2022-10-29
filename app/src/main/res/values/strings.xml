@@ -21,4 +21,6 @@
     <string name="fragment_repo_list_label">Repositories</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="image_description">repository image</string>
+    <string name="connection_status_banner_online">Back Online!</string>
+    <string name="connection_status_banner_offline">No Internet Connection!</string>
 </resources>

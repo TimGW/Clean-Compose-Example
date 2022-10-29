@@ -2,7 +2,16 @@ package com.github.abnamro.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+val primary = Color(0xFF7885FF)
+
+val backgroundDay = Color(0xfff3f7f9)
+val backgroundNight = Color(0xff1A191E)
+
+val surfaceDay = Color(0xffffffff)
+val surfaceNight = Color(0xFF38353F)
+
+val black = Color(0xff000000)
+val white = Color(0xffffffff)
+
+val green = Color(0xff6FCF97)
+val red = Color(0xffEB5757)
