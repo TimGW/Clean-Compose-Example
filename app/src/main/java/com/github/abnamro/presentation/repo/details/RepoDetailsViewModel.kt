@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.abnamro.R
 import com.github.abnamro.domain.model.repo.RepoDetails
-import com.github.abnamro.domain.model.state.ConnectionState
 import com.github.abnamro.domain.model.state.Result
 import com.github.abnamro.domain.usecase.repo.GetNetworkStatusUseCase
 import com.github.abnamro.domain.usecase.repo.GetRepoDetailsUseCase

@@ -3,7 +3,6 @@ package com.github.abnamro.presentation.repo.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.github.abnamro.domain.model.state.ConnectionState
 import com.github.abnamro.domain.usecase.repo.GetNetworkStatusUseCase
 import com.github.abnamro.domain.usecase.repo.GetReposUseCase
 import com.github.abnamro.domain.usecase.repo.GetReposUseCaseImpl
