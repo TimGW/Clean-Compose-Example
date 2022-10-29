@@ -20,6 +20,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keepnames @kotlin.Metadata class com.github.abnamro.data.model.**
--keep class com.github.abnamro.data.model.** { *; }
--keepclassmembers class com.github.abnamro.data.model.** { *; }
+-keepnames @kotlin.Metadata class com.github.cleancompose.data.model.**
+-keep class com.github.cleancompose.data.model.** { *; }
+-keepclassmembers class com.github.cleancompose.data.model.** { *; }

@@ -30,7 +30,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.github.abnamro"
+        applicationId "com.github.cleancompose"
         minSdk 23
         targetSdk 33
         versionCode 1

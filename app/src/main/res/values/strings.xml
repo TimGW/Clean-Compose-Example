@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ABN AMRO assessment</string>
+    <string name="app_name">Clean Compose example</string>
     <string name="error_connection">Please check your internet connection</string>
     <string name="error_database">Couldn\'t load values from database</string>
     <string name="error_generic">Something went wrong.</string>
