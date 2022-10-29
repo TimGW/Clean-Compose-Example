@@ -23,3 +23,4 @@ release variant from `signingConfig signingConfigs.debug` to`signingConfig signi
 * Improve test coverage.
 * Bundle available data and reload details in background 
 * Refactor remote mediator with repository 
+* Cleanup gradle dependencies & refactor to .kts
