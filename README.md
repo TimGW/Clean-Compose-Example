@@ -17,8 +17,5 @@ release variant from `signingConfig signingConfigs.debug` to`signingConfig signi
 # Things to improve
 * Add a `RemoteMediator` to also store the list of repo's in the DB. Now it's only cached in the VM.
 * Provide a more structured setup for mapping between models domain/network/database.
-* Use shared elements from the list and detail page for animations.
-* Improve sending Throwable to ViewModel to generate a better error message.
-* use enums for repo visibility result.
-* Use Compose, improve design and accessibility.
+* Improve error messaging.
 * Improve test coverage.
