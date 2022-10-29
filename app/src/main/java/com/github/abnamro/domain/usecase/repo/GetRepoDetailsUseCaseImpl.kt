@@ -5,7 +5,6 @@ import com.github.abnamro.domain.model.state.Result
 import com.github.abnamro.domain.repository.RepoRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GetRepoDetailsUseCaseImpl @Inject constructor(
@@ -16,14 +15,12 @@ class GetRepoDetailsUseCaseImpl @Inject constructor(
         val query: String,
         val forceRefresh: Boolean
     )
-
     override fun execute(
         params: Params
     ): Flow<Result<RepoDetails?>> {
         val result = repository.getRepoDetails(params.query, params.forceRefresh)
-        return result
-            .debounce { if (it is Result.Loading) DEBOUNCE_TIMEOUT else 0L }
-            .map { it }
+        val deboucedResult = result.debounce { if (it is Result.Loading) DEBOUNCE_TIMEOUT else 0L }
+        return deboucedResult
     }
 }
 
