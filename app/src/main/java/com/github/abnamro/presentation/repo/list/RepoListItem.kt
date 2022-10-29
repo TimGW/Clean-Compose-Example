@@ -48,8 +48,13 @@ fun RepoListItem(repo: Repo, onRepoClick: (String) -> Unit) {
                 .background(MaterialTheme.colors.surface)
         ) {
             Surface(
-                modifier = Modifier.size(130.dp),
-                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier.size(100.dp),
+                shape = RoundedCornerShape(
+                    topStart = 8.dp,
+                    topEnd = 0.dp,
+                    bottomEnd = 0.dp,
+                    bottomStart = 8.dp
+                ),
                 color = MaterialTheme.colors.surface.copy(
                     alpha = 0.2f
                 )
@@ -67,9 +72,7 @@ fun RepoListItem(repo: Repo, onRepoClick: (String) -> Unit) {
                         }
                     },
                     contentDescription = stringResource(R.string.image_description),
-                    modifier = Modifier
-                        .height(100.dp)
-                        .clip(shape = RoundedCornerShape(8.dp)),
+                    modifier = Modifier.height(100.dp),
                     contentScale = ContentScale.Crop
                 )
             }

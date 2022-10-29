@@ -1,6 +1,5 @@
 package com.github.abnamro.presentation.repo.details
 
-import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,7 +23,7 @@ class RepoDetailsViewModel @Inject constructor(
     private val getRepoDetailsUseCase: GetRepoDetailsUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    private val args = RepoDetailsFragmentArgs.fromSavedStateHandle(savedStateHandle)
+    private val query: String = checkNotNull(savedStateHandle["query"]) // todo: safe args?
     private val _uiState = MutableStateFlow(RepoDetailsUiState())
     val uiState: StateFlow<RepoDetailsUiState> = _uiState.asStateFlow()
 
@@ -33,7 +32,7 @@ class RepoDetailsViewModel @Inject constructor(
     }
 
     fun fetchRepoDetails(forceRefresh: Boolean = false) {
-        val result = getRepoDetailsUseCase.execute(GetRepoDetailsUseCaseImpl.Params(args.query, forceRefresh))
+        val result = getRepoDetailsUseCase.execute(GetRepoDetailsUseCaseImpl.Params(query, forceRefresh))
         viewModelScope.launch {
             result.onEach { updateUiState(it) }.collect()
         }
@@ -45,14 +44,6 @@ class RepoDetailsViewModel @Inject constructor(
         is Result.ErrorType.IOError -> R.string.error_connection
         is Result.ErrorType.Unknown -> R.string.error_generic
         else -> null
-    }
-
-    fun onRepoDetailsCtaClick(htmlURL: String) {
-        try {
-            _uiState.update { it.copy(uri = Uri.parse(htmlURL)) }
-        } catch (e: Exception) {
-            _uiState.update { it.copy(message = R.string.fragment_repo_details_html_link_fail) }
-        }
     }
 
     private fun updateUiState(
@@ -86,8 +77,5 @@ class RepoDetailsViewModel @Inject constructor(
         }
     }
 
-    // One off events need to reset the state to null. See:
-    // https://developer.android.com/topic/architecture/ui-layer/events
-    fun onUriOpened() { _uiState.update { it.copy(uri = null) } }
     fun onMessageShown() { _uiState.update { it.copy(message = null) } }
 }
