@@ -4,10 +4,10 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.github.cleancompose.domain.model.repo.RepoDetails
+import com.github.cleancompose.domain.model.repo.Repo
 
 @Entity
-data class RepoDetailsEntity(
+data class RepoEntity(
     val name: String,
     @PrimaryKey @ColumnInfo(name = "full_name") val fullName: String,
     @ColumnInfo(name = "is_private") val isPrivate: Boolean,
@@ -22,17 +22,16 @@ data class RepoDetailsEntity(
         @ColumnInfo(name = "avatar_url") val avatarURL: String,
     )
 
-    fun toDetails() = RepoDetails(
+    fun toRepo() = Repo(
         name,
         fullName,
         isPrivate,
-        RepoDetails.Owner(
+        Repo.Owner(
             owner.login,
             owner.avatarURL,
         ),
         htmlURL,
         description,
         visibility,
-        modifiedAt
     )
 }

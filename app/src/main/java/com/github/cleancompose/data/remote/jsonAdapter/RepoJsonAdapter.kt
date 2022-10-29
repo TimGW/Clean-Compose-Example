@@ -1,28 +1,28 @@
 package com.github.cleancompose.data.remote.jsonAdapter
 
+import com.github.cleancompose.data.model.RepoEntity
 import com.github.cleancompose.data.model.RepoJson
-import com.github.cleancompose.domain.model.repo.Repo
 import com.squareup.moshi.FromJson
 
 class RepoJsonAdapter {
 
     @FromJson
-    fun fromJson(json: List<RepoJson>?): List<Repo>? {
+    fun fromJson(json: List<RepoJson>?): List<RepoEntity>? {
         if (json.isNullOrEmpty()) return null
 
         return json.map {
-            Repo(
-                it.id,
+            RepoEntity(
                 it.name,
                 it.fullName,
                 it.isPrivate,
-                Repo.Owner(
+                RepoEntity.Owner(
                     it.owner.login,
                     it.owner.avatarURL,
                 ),
                 it.htmlURL,
                 it.description.orEmpty(),
-                it.visibility
+                it.visibility,
+                System.currentTimeMillis()
             )
         }
     }

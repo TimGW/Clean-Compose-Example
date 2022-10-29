@@ -16,7 +16,7 @@
         android:theme="@style/Theme.MaterialComponents.NoActionBar"
         tools:targetApi="33">
         <activity
-            android:name="com.github.cleancompose.presentation.repo.RepoActivity"
+            android:name="com.github.cleancompose.presentation.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

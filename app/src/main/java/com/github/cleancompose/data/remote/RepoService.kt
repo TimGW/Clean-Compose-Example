@@ -1,7 +1,7 @@
 package com.github.cleancompose.data.remote
 
 import com.github.cleancompose.data.model.RepoDetailsEntity
-import com.github.cleancompose.domain.model.repo.Repo
+import com.github.cleancompose.data.model.RepoEntity
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -19,7 +19,7 @@ interface RepoService {
         @Query("direction") direction: String? = null,
         @Query("per_page") perPage: Int? = null,
         @Query("page") page: Int? = null,
-    ): Response<List<Repo>>
+    ): Response<List<RepoEntity>>
 
     @GET("repos/{ownerRepo}")
     suspend fun getRepoDetails(

@@ -1,4 +1,8 @@
 # Clean Compose Example
+Android application with clean architecture principles for demo purposes. This app has an offline 
+first approach with the database as a single source of truth. Applied the following;
+- Patterns: Clean Architecture, Repository, Use Cases, MVVM, Single Activity
+- Libraries: Room, Hilt, Kotlin Flow, Moshi, Paging3, Jetpack Compose, Retrofit
 
 # Setup
 For unauthenticated requests, the GitHub rate limit allows for up to 60 requests per hour. 
@@ -15,7 +19,6 @@ keystore information from the keystore you created earlier. Update the signingCo
 release variant from `signingConfig signingConfigs.debug` to`signingConfig signingConfigs.release`
 
 # Things to improve
-* Add a `RemoteMediator` to also store the list of repo's in the DB. Now it's only cached in the VM.
 * Provide a more structured setup for mapping between models domain/network/database.
 * Improve error messaging.
 * Improve test coverage.

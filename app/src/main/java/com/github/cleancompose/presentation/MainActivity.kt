@@ -1,4 +1,4 @@
-package com.github.cleancompose.presentation.repo
+package com.github.cleancompose.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -27,7 +27,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RepoActivity : ComponentActivity() {
+class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

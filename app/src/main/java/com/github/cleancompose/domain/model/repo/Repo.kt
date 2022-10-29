@@ -2,7 +2,6 @@ package com.github.cleancompose.domain.model.repo
 
 /** Data class for Github repositories overview */
 data class Repo(
-    val id: Long,
     val name: String,
     val fullName: String,
     val isPrivate: Boolean,
