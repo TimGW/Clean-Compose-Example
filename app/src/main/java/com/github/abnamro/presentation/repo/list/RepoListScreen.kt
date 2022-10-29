@@ -12,10 +12,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
@@ -29,7 +27,7 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 fun RepoList(
     viewModel: RepoListViewModel = hiltViewModel(),
-    onRepoClick: (String) -> Unit = {},
+    onRepoClick: (String) -> Unit,
 ) {
     val items = viewModel.uiState.collectAsLazyPagingItems()
     val state = rememberSwipeRefreshState(
@@ -39,18 +37,18 @@ fun RepoList(
         state = state,
         onRefresh = { items.refresh() },
     ) {
-        RepoListContent(list = viewModel.uiState)
+        RepoListContent(list = viewModel.uiState, onRepoClick)
     }
 }
 
 @Composable
 fun RepoListContent(
     list: Flow<PagingData<Repo>>,
-    onRepoClick: (String) -> Unit = {}
+    onRepoClick: (String) -> Unit
 ) {
     val pagingItems: LazyPagingItems<Repo> = list.collectAsLazyPagingItems()
-    val ctx = LocalContext.current
-    val navController = rememberNavController()
+//    val ctx = LocalContext.current
+//    val navController = rememberNavController()
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
