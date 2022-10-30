@@ -34,13 +34,11 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 fun RepoList(
     viewModel: RepoListViewModel = hiltViewModel(),
-    onRepoClick: (String) -> Unit,
+    onRepoClick: (Repo) -> Unit,
 ) {
     val items = viewModel.uiState.collectAsLazyPagingItems()
     val hasNetwork by viewModel.networkStatus.collectAsState(true)
-    val state = rememberSwipeRefreshState(
-        isRefreshing = items.loadState.refresh is LoadState.Loading,
-    )
+    val state = rememberSwipeRefreshState(items.loadState.refresh is LoadState.Loading)
 
     LaunchedEffect(hasNetwork) {
         if (hasNetwork) items.refresh()
@@ -53,7 +51,7 @@ fun RepoList(
     ) {
         Column {
             ConnectivityStatus(hasNetwork)
-            RepoListContent(list = viewModel.uiState, onRepoClick)
+            RepoListContent(viewModel.uiState, onRepoClick)
         }
     }
 }
@@ -61,7 +59,7 @@ fun RepoList(
 @Composable
 fun RepoListContent(
     list: Flow<PagingData<Repo>>,
-    onRepoClick: (String) -> Unit
+    onRepoClick: (Repo) -> Unit
 ) {
     val pagingItems: LazyPagingItems<Repo> = list.collectAsLazyPagingItems()
 
@@ -71,7 +69,7 @@ fun RepoListContent(
         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
     ) {
         items(pagingItems) { item ->
-            item?.let { RepoListItem(repo = it, onRepoClick = onRepoClick) }
+            item?.let { RepoListItem(it, onRepoClick) }
         }
         pagingItems.apply {
             when {

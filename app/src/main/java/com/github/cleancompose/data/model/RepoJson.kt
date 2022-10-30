@@ -1,22 +1,36 @@
 package com.github.cleancompose.data.model
 
-import com.squareup.moshi.Json
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-/** Moshi data class @field is required for moshi to work with kotlin.
- * Implementing the official moshi-kotlin dependency is too large imo */
+@Serializable
 data class RepoJson(
-    @field:Json(name = "id") val id: Long,
-    @field:Json(name = "name") val name: String,
-    @field:Json(name = "full_name") val fullName: String,
-    @field:Json(name = "private") val isPrivate: Boolean,
-    @field:Json(name = "owner") val owner: OwnerJson,
-    @field:Json(name = "html_url") val htmlURL: String,
-    @field:Json(name = "description") val description: String?,
-    @field:Json(name = "visibility") val visibility: String,
+    @SerialName("name") val name: String,
+    @SerialName("full_name") val fullName: String,
+    @SerialName("private") val isPrivate: Boolean,
+    @SerialName("owner") val owner: OwnerJson,
+    @SerialName("html_url") val htmlURL: String,
+    @SerialName("description") val description: String?,
+    @SerialName("visibility") val visibility: String,
 ) {
+    @Serializable
     data class OwnerJson(
-        @field:Json(name = "login") val login: String,
-        @field:Json(name = "avatar_url") val avatarURL: String,
+        @SerialName("login") val login: String,
+        @SerialName("avatar_url") val avatarURL: String,
+    )
+
+    fun toEntity() = RepoEntity(
+        name,
+        fullName,
+        isPrivate,
+        RepoEntity.Owner(
+            owner.login,
+            owner.avatarURL,
+        ),
+        htmlURL,
+        description.orEmpty(),
+        visibility,
+        System.currentTimeMillis()
     )
 }
 

@@ -2,7 +2,7 @@
 Android application with clean architecture principles for demo purposes. This app has an offline 
 first approach with the database as a single source of truth. Applied the following;
 - Patterns: Clean Architecture, Repository, Use Cases, MVVM, Single Activity
-- Libraries: Room, Hilt, Kotlin Flow, Moshi, Paging3, Jetpack Compose, Retrofit
+- Libraries: Room, Hilt, Kotlin Flow, Paging3, Jetpack Compose, Retrofit
 
 # Setup
 For unauthenticated requests, the GitHub rate limit allows for up to 60 requests per hour. 
@@ -21,6 +21,5 @@ release variant from `signingConfig signingConfigs.debug` to`signingConfig signi
 # Things to improve
 * Provide a more structured setup for mapping between models domain/network/database.
 * Improve test coverage.
-* Bundle available data and reload details in background 
-* Refactor remote mediator with repository 
+* Screenshot testing with paparazzi
 * Cleanup gradle dependencies & refactor to .kts

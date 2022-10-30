@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'org.jetbrains.kotlin.plugin.serialization'
 }
 
 File apiKeyPropertiesFile
@@ -107,6 +108,7 @@ dependencies {
     // jetbrains
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
 
     // android
     implementation("androidx.core:core-ktx:1.9.0")
@@ -149,8 +151,8 @@ dependencies {
 
     // network
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
-    implementation("com.squareup.retrofit2:converter-moshi:$retrofit_version")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
 
     // paging
     implementation "androidx.paging:paging-compose:1.0.0-alpha17"

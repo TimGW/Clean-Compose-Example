@@ -4,12 +4,16 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.cleancompose.R
+import com.github.cleancompose.domain.model.repo.Repo
 import com.github.cleancompose.domain.model.repo.RepoDetails
 import com.github.cleancompose.domain.model.state.Result
 import com.github.cleancompose.domain.usecase.repo.GetNetworkStatusUseCase
 import com.github.cleancompose.domain.usecase.repo.GetRepoDetailsUseCase
 import com.github.cleancompose.domain.usecase.repo.GetRepoDetailsUseCaseImpl
+import com.github.cleancompose.presentation.repo.navigation.RepoDestination
+import com.github.cleancompose.presentation.repo.navigation.mediumAnimTime
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,6 +22,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,19 +32,19 @@ class RepoDetailsViewModel @Inject constructor(
     getNetworkStatusUseCase: GetNetworkStatusUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    private val query: String = checkNotNull(savedStateHandle["query"]) // todo: safe args?
+    private val initialRepo: RepoDetails =
+        checkNotNull(savedStateHandle[RepoDestination.DetailsScreen.repoArg]).let {
+            Json.decodeFromString<Repo>(it as String).toDetails()
+        }
     private val _uiState: MutableStateFlow<RepoDetailsUiState> =
-        MutableStateFlow(RepoDetailsUiState.Initial)
+        MutableStateFlow(RepoDetailsUiState.Initial(initialRepo))
     val uiState: StateFlow<RepoDetailsUiState> = _uiState.asStateFlow()
     val networkStatus: Flow<Boolean> = getNetworkStatusUseCase.execute(Unit)
 
-    init {
-        fetchRepoDetails()
-    }
-
     fun fetchRepoDetails(forceRefresh: Boolean = false) {
-        val result =
-            getRepoDetailsUseCase.execute(GetRepoDetailsUseCaseImpl.Params(query, forceRefresh))
+        val result = getRepoDetailsUseCase.execute(
+            GetRepoDetailsUseCaseImpl.Params(initialRepo.fullName, forceRefresh)
+        )
         viewModelScope.launch {
             result.onEach { updateUiState(it) }.collect()
         }
@@ -57,8 +63,11 @@ class RepoDetailsViewModel @Inject constructor(
         when (result) {
             is Result.Error -> _uiState.update {
                 val msg = getMessageForError(result.error)
-                result.data?.let { RepoDetailsUiState.SoftError(it, msg) }
-                    ?: RepoDetailsUiState.FatalError(msg)
+                if (result.data == null) {
+                    RepoDetailsUiState.FatalError(msg)
+                } else {
+                    RepoDetailsUiState.SoftError(result.data, msg)
+                }
             }
             is Result.Loading -> _uiState.update { RepoDetailsUiState.Loading(result.data) }
             is Result.Success -> _uiState.update {
@@ -66,6 +75,4 @@ class RepoDetailsViewModel @Inject constructor(
             }
         }
     }
-
-//    fun onMessageShown() { _uiState.update { it.copy(message = null) } }
 }

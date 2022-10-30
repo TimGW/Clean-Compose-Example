@@ -12,8 +12,8 @@ import androidx.navigation.NavHostController
 import com.github.cleancompose.presentation.repo.screens.details.RepoDetailsScreen
 import com.github.cleancompose.presentation.repo.screens.list.RepoList
 import com.google.accompanist.navigation.animation.AnimatedNavHost
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import com.google.accompanist.navigation.animation.composable as animatedComposable
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -27,8 +27,6 @@ fun RepoNavHost(
         startDestination = RepoDestination.ListScreen.route,
         modifier = modifier
     ) {
-        val shortAnimTime = 300
-        val mediumAnimTime = 600
         val enterAnim = slideInVertically(
             animationSpec = tween(mediumAnimTime),
             initialOffsetY = { it / 6 }
@@ -43,9 +41,9 @@ fun RepoNavHost(
             enterTransition = { enterAnim },
             exitTransition = { exitAnim }
         ) {
-            RepoList(onRepoClick = { fullName ->
-                val encoded = URLEncoder.encode(fullName, StandardCharsets.UTF_8.toString())
-                navController.navigate(route = "${RepoDestination.DetailsScreen.route}/$encoded")
+            RepoList(onRepoClick = { repo ->
+                val repoJson = Json.encodeToString(repo)
+                navController.navigate(route = "${RepoDestination.DetailsScreen.route}/$repoJson")
             })
         }
 
@@ -59,3 +57,6 @@ fun RepoNavHost(
         }
     }
 }
+
+const val shortAnimTime = 300
+const val mediumAnimTime = 600

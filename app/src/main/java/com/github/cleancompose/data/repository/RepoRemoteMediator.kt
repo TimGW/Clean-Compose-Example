@@ -1,10 +1,11 @@
-package com.github.cleancompose.data.local
+package com.github.cleancompose.data.repository
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
+import com.github.cleancompose.data.local.AppDatabase
 import com.github.cleancompose.data.model.RepoEntity
 import com.github.cleancompose.data.model.RepoKeysEntity
 import com.github.cleancompose.data.remote.RepoService
@@ -66,12 +67,13 @@ class RepoRemoteMediator(
             }
 
             // fetch fresh repos from network
-            val response: Response<List<RepoEntity>> = repoService.getRepos(
+            val response = repoService.getRepos(
                 userName = userName,
                 page = currentPage,
                 perPage = PAGE_SIZE
             )
-            val reposEntity: List<RepoEntity> = response.body()
+
+            val reposEntity: List<RepoEntity> = response.body()?.map { it.toEntity() }
                 ?: return MediatorResult.Error(Throwable("Response body is null"))
 
             val prevPage: Int? = response.headers()["Link"]?.let { link ->

@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package com.github.cleancompose.data.di
 
 import android.content.Context
@@ -10,21 +8,21 @@ import com.github.cleancompose.data.error.ErrorHandlerImpl
 import com.github.cleancompose.data.local.AppDatabase
 import com.github.cleancompose.data.local.DATABASE_NAME
 import com.github.cleancompose.data.remote.HeaderInterceptor
-import com.github.cleancompose.data.remote.jsonAdapter.RepoDetailsJsonAdapter
-import com.github.cleancompose.data.remote.jsonAdapter.RepoJsonAdapter
 import com.github.cleancompose.domain.model.state.ErrorHandler
-import com.squareup.moshi.Moshi
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -53,13 +51,19 @@ abstract class AppModule {
 
         @Provides
         @Singleton
+        fun provideJson(): Json = Json { ignoreUnknownKeys = true }
+
+        @Provides
+        @Singleton
+        @OptIn(ExperimentalSerializationApi::class)
         fun provideRetrofit(
             okHttpClient: OkHttpClient,
-            moshi: Moshi
+            json: Json
         ): Retrofit {
+            val contentType = "application/json".toMediaType()
             return Retrofit.Builder().baseUrl(BuildConfig.BASE_URL)
                 .client(okHttpClient)
-                .addConverterFactory(MoshiConverterFactory.create(moshi))
+                .addConverterFactory(json.asConverterFactory(contentType))
                 .build()
         }
 
@@ -77,11 +81,5 @@ abstract class AppModule {
             })
             return builder.build()
         }
-
-        @Provides
-        fun provideMoshi(): Moshi = Moshi.Builder()
-            .add(RepoJsonAdapter())
-            .add(RepoDetailsJsonAdapter())
-            .build()
     }
 }

@@ -23,3 +23,7 @@
 -keepnames @kotlin.Metadata class com.github.cleancompose.data.model.**
 -keep class com.github.cleancompose.data.model.** { *; }
 -keepclassmembers class com.github.cleancompose.data.model.** { *; }
+
+-keepnames @kotlin.Metadata class com.github.cleancompose.domain.model.**
+-keep class com.github.cleancompose.domain.model.** { *; }
+-keepclassmembers class com.github.cleancompose.domain.model.** { *; }

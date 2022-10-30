@@ -5,10 +5,10 @@ package com.github.cleancompose.domain.model.state
 /** Wrapper class to handle typical network interactions for data, errors and loading state */
 sealed class Result<out T>(
     /** optional available data */
-    open val data: T? = null,
+    val data: T? = null,
 ) {
     /** Success state */
-    class Success<T>(override val data: T) : Result<T>(data)
+    class Success<T>(data: T) : Result<T>(data)
     /** Loading state */
     class Loading<T>(data: T? = null) : Result<T>(data)
     /** Error state */

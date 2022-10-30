@@ -34,11 +34,11 @@ import com.github.cleancompose.R
 import com.github.cleancompose.domain.model.repo.Repo
 
 @Composable
-fun RepoListItem(repo: Repo, onRepoClick: (String) -> Unit) {
+fun RepoListItem(repo: Repo, onRepoClick: (Repo) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onRepoClick(repo.fullName) },
+            .clickable { onRepoClick(repo) },
         shape = RoundedCornerShape(8.dp),
         elevation = 2.dp
     ) {

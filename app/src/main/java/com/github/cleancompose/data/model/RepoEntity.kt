@@ -22,7 +22,7 @@ data class RepoEntity(
         @ColumnInfo(name = "avatar_url") val avatarURL: String,
     )
 
-    fun toRepo() = Repo(
+    fun toDomain() = Repo(
         name,
         fullName,
         isPrivate,
@@ -33,5 +33,6 @@ data class RepoEntity(
         htmlURL,
         description,
         visibility,
+        modifiedAt
     )
 }

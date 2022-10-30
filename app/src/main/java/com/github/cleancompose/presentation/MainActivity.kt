@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.github.cleancompose.presentation.core.ConnectivityStatus
 import com.github.cleancompose.presentation.repo.navigation.RepoDestination
 import com.github.cleancompose.presentation.repo.navigation.RepoNavHost
 import com.github.cleancompose.presentation.repo.navigation.screens

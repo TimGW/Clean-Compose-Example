@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -41,7 +40,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -67,33 +65,35 @@ fun RepoDetailsScreen(
     val loadingState = rememberSwipeRefreshState(uiState is RepoDetailsUiState.Loading)
     val scrollState = rememberScrollState()
     val hasNetwork by viewModel.networkStatus.collectAsState(true)
-    val refresh = { viewModel.fetchRepoDetails(forceRefresh = true) }
-
-    LaunchedEffect(hasNetwork) { if (hasNetwork) refresh() }
 
     SwipeRefresh(
         state = loadingState,
         swipeEnabled = hasNetwork,
-        onRefresh = refresh
+        onRefresh = { viewModel.fetchRepoDetails(forceRefresh = true) }
     ) {
         when (val state = uiState) {
-            is RepoDetailsUiState.Initial -> { /* Do nothing */ }
+            is RepoDetailsUiState.Initial -> {
+                RepoSuccessState(state.repoDetails, scrollState, hasNetwork)
+            }
             is RepoDetailsUiState.Loading -> {
                 state.repoDetails?.let { RepoSuccessState(it, scrollState, hasNetwork) }
             }
-            is RepoDetailsUiState.Success -> RepoSuccessState(
-                state.repoDetails, scrollState, hasNetwork
-            )
-            RepoDetailsUiState.Empty -> ShowTextScreen(R.string.fragment_repo_details_empty)
-            is RepoDetailsUiState.FatalError -> ShowTextScreen(state.message)
-            is RepoDetailsUiState.SoftError -> RepoSoftErrorState(
-                state.repoDetails,
-                state.message,
-                scrollState,
-                hasNetwork
-            )
+            is RepoDetailsUiState.Success -> {
+                RepoSuccessState(state.repoDetails, scrollState, hasNetwork)
+            }
+            is RepoDetailsUiState.Empty -> {
+                ShowTextScreen(R.string.fragment_repo_details_empty)
+            }
+            is RepoDetailsUiState.FatalError -> {
+                ShowTextScreen(state.message)
+            }
+            is RepoDetailsUiState.SoftError -> {
+                RepoSoftErrorState(state.repoDetails, state.message, scrollState, hasNetwork)
+            }
         }
     }
+
+    LaunchedEffect(hasNetwork) { if (hasNetwork) { viewModel.fetchRepoDetails() } }
 }
 
 @Composable
@@ -113,7 +113,7 @@ private fun RepoSuccessState(
                 ) {
                     RepoHeader(
                         scrollState,
-                        repoDetails,
+                        repoDetails.owner.avatarURL,
                         this@BoxWithConstraints.maxHeight
                     )
                     RepoContent(repoDetails, this@BoxWithConstraints.maxHeight)
@@ -150,7 +150,7 @@ private fun showMessage(context: Context, message: String) {
 @Composable
 private fun RepoHeader(
     scrollState: ScrollState,
-    repo: RepoDetails,
+    url: String,
     containerHeight: Dp
 ) {
     val offset = (scrollState.value / 2)
@@ -158,7 +158,7 @@ private fun RepoHeader(
 
     SubcomposeAsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
-            .data(repo.owner.avatarURL)
+            .data(url)
             .crossfade(true)
             .build(),
         loading = {
@@ -180,7 +180,7 @@ private fun RepoContent(repo: RepoDetails, containerHeight: Dp) {
     Column {
         Spacer(modifier = Modifier.height(8.dp))
 
-        RepoName(repo)
+        RepoName(repo.name)
 
         RepoProperty(stringResource(R.string.fragment_repo_details_full_name), repo.fullName)
         RepoProperty(
@@ -206,11 +206,11 @@ private fun RepoContent(repo: RepoDetails, containerHeight: Dp) {
 
 @Composable
 private fun RepoName(
-    repo: RepoDetails
+    name: String
 ) {
     Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
         Text(
-            text = repo.name,
+            text = name,
             modifier = Modifier.baselineHeight(32.dp),
             style = MaterialTheme.typography.h5,
             fontWeight = FontWeight.Bold

@@ -10,9 +10,9 @@ sealed class RepoDestination(
 ) {
     object ListScreen : RepoDestination("list", R.string.fragment_repo_list_label)
     object DetailsScreen : RepoDestination("details", R.string.fragment_repo_details_label) {
-        private const val queryArg = "query"
-        val routeWithArgs = "$route/{$queryArg}"
-        val arguments = listOf(navArgument(queryArg) { type = NavType.StringType })
+        const val repoArg = "repo"
+        val routeWithArgs = "$route/{$repoArg}"
+        val arguments = listOf(navArgument(repoArg) { type = NavType.StringType })
     }
 }
 
