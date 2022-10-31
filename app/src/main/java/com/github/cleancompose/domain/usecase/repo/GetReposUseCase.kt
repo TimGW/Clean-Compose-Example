@@ -5,5 +5,5 @@ import com.github.cleancompose.domain.model.repo.Repo
 import com.github.cleancompose.domain.usecase.UseCase
 import kotlinx.coroutines.flow.Flow
 
-/** Marker interface for GetReposUseCase, preventing the need of @JvmSuppressWildcards */
+/** Marker interface preventing the need of @JvmSuppressWildcards and simplify the type */
 interface GetReposUseCase : UseCase<GetReposUseCaseImpl.Params, Flow<PagingData<Repo>>>

@@ -10,11 +10,11 @@ class GetReposUseCaseImpl @Inject constructor(
     private val repository: RepoRepository,
 ) : GetReposUseCase {
 
-    data class Params(val user: String = DEFAULT_USER)
+    data class Params(val user: String)
 
-    override fun execute(
+    override fun invoke(
         params: Params
     ): Flow<PagingData<Repo>> = repository.getPagedRepos(params.user)
 }
 
-private const val DEFAULT_USER = "timgw"
+const val DEFAULT_USER = "timgw"

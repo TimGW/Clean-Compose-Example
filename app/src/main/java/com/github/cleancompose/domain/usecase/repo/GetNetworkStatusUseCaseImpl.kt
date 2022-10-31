@@ -8,7 +8,5 @@ class GetNetworkStatusUseCaseImpl @Inject constructor(
     private val repository: ConnectivityRepository,
 ) : GetNetworkStatusUseCase {
 
-    override fun execute(
-        params: Unit
-    ): Flow<Boolean> = repository.connectionState
+    override fun invoke(params: Unit): Flow<Boolean> = repository.connectionState
 }

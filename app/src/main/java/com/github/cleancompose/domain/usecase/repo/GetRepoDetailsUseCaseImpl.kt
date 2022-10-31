@@ -15,7 +15,8 @@ class GetRepoDetailsUseCaseImpl @Inject constructor(
         val query: String,
         val forceRefresh: Boolean
     )
-    override fun execute(
+
+    override fun invoke(
         params: Params
     ): Flow<Result<RepoDetails?>> {
         val result = repository.getRepoDetails(params.query, params.forceRefresh)

@@ -7,13 +7,12 @@ import com.github.cleancompose.R
 import com.github.cleancompose.domain.model.repo.Repo
 import com.github.cleancompose.domain.model.repo.RepoDetails
 import com.github.cleancompose.domain.model.state.Result
+import com.github.cleancompose.domain.usecase.invoke
 import com.github.cleancompose.domain.usecase.repo.GetNetworkStatusUseCase
 import com.github.cleancompose.domain.usecase.repo.GetRepoDetailsUseCase
 import com.github.cleancompose.domain.usecase.repo.GetRepoDetailsUseCaseImpl
 import com.github.cleancompose.presentation.repo.navigation.RepoDestination
-import com.github.cleancompose.presentation.repo.navigation.mediumAnimTime
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,10 +38,10 @@ class RepoDetailsViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<RepoDetailsUiState> =
         MutableStateFlow(RepoDetailsUiState.Initial(initialRepo))
     val uiState: StateFlow<RepoDetailsUiState> = _uiState.asStateFlow()
-    val networkStatus: Flow<Boolean> = getNetworkStatusUseCase.execute(Unit)
+    val networkStatus: Flow<Boolean> = getNetworkStatusUseCase()
 
     fun fetchRepoDetails(forceRefresh: Boolean = false) {
-        val result = getRepoDetailsUseCase.execute(
+        val result = getRepoDetailsUseCase(
             GetRepoDetailsUseCaseImpl.Params(initialRepo.fullName, forceRefresh)
         )
         viewModelScope.launch {
