@@ -26,7 +26,7 @@ class GetRepoDetailsUseCaseTest {
         val refresh = false
         val params = GetRepoDetailsUseCaseImpl.Params(query, refresh)
 
-        useCase.execute(params)
+        useCase(params)
 
         verify(repository).getRepoDetails(params.query, params.forceRefresh)
     }

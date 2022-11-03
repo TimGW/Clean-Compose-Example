@@ -22,7 +22,7 @@ class GetReposUseCaseTest {
 
     @Test
     fun invalidParams() {
-        useCase.execute(GetReposUseCaseImpl.Params("Tim"))
+        useCase(GetReposUseCaseImpl.Params("Tim"))
 
         verify(repository).getPagedRepos("Tim")
     }
