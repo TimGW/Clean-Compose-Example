@@ -15,18 +15,4 @@ data class RepoDetails(
         val login: String,
         val avatarURL: String,
     )
-
-    fun toRepo() = Repo(
-        name,
-        fullName,
-        isPrivate,
-        Repo.Owner(
-            owner.login,
-            owner.avatarURL
-        ),
-        htmlURL,
-        description,
-        visibility,
-        modifiedAt,
-    )
 }

@@ -9,13 +9,12 @@ import com.github.cleancompose.data.model.RepoKeysEntity
 @Dao
 interface RepoKeysDao {
 
-    @Query("SELECT * FROM RepoKeysEntity WHERE id =:fullName")
-    suspend fun getRemoteKeys(fullName: String): RepoKeysEntity
+    @Query("SELECT * FROM RepoKeysEntity WHERE fullName = :fullName LIMIT 1")
+    suspend fun getRemoteKeys(fullName: String): RepoKeysEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addAllRemoteKeys(remoteKeys: List<RepoKeysEntity>)
 
     @Query("DELETE FROM RepoKeysEntity")
     suspend fun deleteAllRemoteKeys()
-
 }

@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class RepoKeysEntity(
-    @PrimaryKey val id: String,
+    @PrimaryKey val fullName: String,
     val prevPage: Int?,
     val nextPage: Int?
 )

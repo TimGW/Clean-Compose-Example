@@ -11,7 +11,6 @@ import com.github.cleancompose.data.model.RepoKeysEntity
 import com.github.cleancompose.data.remote.RepoService
 import com.github.cleancompose.domain.model.repo.Repo
 import retrofit2.HttpException
-import retrofit2.Response
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
@@ -92,7 +91,7 @@ class RepoRemoteMediator(
                 }
                 val keys = reposEntity.map { repo ->
                     RepoKeysEntity(
-                        id = repo.fullName,
+                        fullName = repo.fullName,
                         prevPage = prevPage,
                         nextPage = nextPage
                     )
