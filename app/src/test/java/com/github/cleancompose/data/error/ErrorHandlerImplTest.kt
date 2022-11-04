@@ -2,23 +2,17 @@ package com.github.cleancompose.data.error
 
 import com.github.cleancompose.domain.model.state.ErrorHandler
 import com.github.cleancompose.domain.model.state.Result
-import org.junit.Assert.*
+import io.mockk.mockk
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
 import retrofit2.HttpException
 import retrofit2.Response
 import java.io.IOException
 
-@RunWith(MockitoJUnitRunner::class)
 class ErrorHandlerImplTest {
-
     private lateinit var errorHandler: ErrorHandler
-
-    @Mock
-    private lateinit var mockResponse: Response<*>
+    private val mockResponse: Response<*> = mockk(relaxed = true)
 
     @Before
     fun beforeTest() {

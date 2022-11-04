@@ -38,10 +38,10 @@ class RepoDetailsViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<RepoDetailsUiState> =
         MutableStateFlow(RepoDetailsUiState.Initial(initialRepo))
     val uiState: StateFlow<RepoDetailsUiState> = _uiState.asStateFlow()
-    val networkStatus: Flow<Boolean> = getNetworkStatusUseCase()
+    val networkStatus: Flow<Boolean> = getNetworkStatusUseCase.invoke()
 
     fun fetchRepoDetails(forceRefresh: Boolean = false) {
-        val result = getRepoDetailsUseCase(
+        val result = getRepoDetailsUseCase.invoke(
             GetRepoDetailsUseCaseImpl.Params(initialRepo.fullName, forceRefresh)
         )
         viewModelScope.launch {

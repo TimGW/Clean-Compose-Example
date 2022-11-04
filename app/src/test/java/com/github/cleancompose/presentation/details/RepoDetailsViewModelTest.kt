@@ -6,7 +6,13 @@ import com.github.cleancompose.domain.model.repo.Repo
 import com.github.cleancompose.domain.model.state.Result.ErrorType
 import com.github.cleancompose.domain.usecase.repo.GetNetworkStatusUseCase
 import com.github.cleancompose.domain.usecase.repo.GetRepoDetailsUseCase
+import com.github.cleancompose.presentation.repo.screens.details.RepoDetailsUiState
 import com.github.cleancompose.presentation.repo.screens.details.RepoDetailsViewModel
+import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.spyk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -18,18 +24,11 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(MockitoJUnitRunner::class)
 class RepoDetailsViewModelTest {
-    @Mock
-    private lateinit var getRepoDetailsUseCase: GetRepoDetailsUseCase
-
-    @Mock
-    private lateinit var getNetworkStatusUseCase: GetNetworkStatusUseCase
+    private val getRepoDetailsUseCase: GetRepoDetailsUseCase = spyk()
+    private val getNetworkStatusUseCase: GetNetworkStatusUseCase = spyk()
     private lateinit var viewModel: RepoDetailsViewModel
     private val testRepo = Repo(
         name = "",
