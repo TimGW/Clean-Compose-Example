@@ -17,7 +17,7 @@ class GetReposUseCaseTest {
 
     @Test
     fun invalidParams() {
-        useCase(GetReposUseCaseImpl.Params("Tim"))
+        useCase.invoke(GetReposUseCaseImpl.Params("Tim"))
 
         verify { repository.getPagedRepos("Tim") }
     }
